@@ -15,6 +15,7 @@ import { FilesController } from './src/controllers/FilesController';
 import multer from 'multer';
 import { CajasController } from './src/controllers/CajasController';
 import { ReportesController } from './src/controllers/ReportesController';
+import { EstadisticasController } from './src/controllers/EstadisticasController';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -760,6 +761,39 @@ export const AppRoutes = [
     path: '/reportes/obtener-data-reporte',
     method: 'post',
     action: ReportesController.obtenerDataReporte,
+    schema: schemaEmpty
+  },
+  //#endregion
+
+  // region Estadísticas
+  {
+    path: '/ventas/obtener-ventas-por-forma-pago',
+    method: 'post',
+    action: EstadisticasController.obtenerVentasPorFormaPago,
+    schema: schemaEmpty
+  },
+  {
+    path: '/ventas/obtener-ventas-por-categoria',
+    method: 'post',
+    action: EstadisticasController.obtenerVentasPorCategoria,
+    schema: schemaEmpty
+  },
+  {
+    path: '/ventas/obtener-ventas-por-hora',
+    method: 'post',
+    action: EstadisticasController.obtenerVentasPorHora,
+    schema: schemaEmpty
+  },
+  {
+    path: '/ventas/obtener-ventas-por-empleado',
+    method: 'post',
+    action: EstadisticasController.obtenerVentasPorEmpleado,
+    schema: schemaEmpty
+  },
+  {
+    path: '/ventas/obtener-ventas-por-cliente',
+    method: 'post',
+    action: EstadisticasController.obtenerVentasPorCliente,
     schema: schemaEmpty
   }
   //#endregion
