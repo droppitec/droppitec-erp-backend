@@ -10,6 +10,7 @@ import { connectDatabase } from './src/data/db';
 import cors from 'cors';
 import { authenticateToken } from './middlewares/AuthValidator';
 import { requireAdminRole } from './middlewares/RolValidator';
+import PoolDb from './src/data/db';
 
 // create express app
 export const app = express();
@@ -20,6 +21,34 @@ app.use(
   })
 );
 app.use(cors());
+
+// Health check endpoint - debe estar antes de los middlewares de autenticación
+// Nos sirve para verifica si el server esta correctamente levantantado y escuchando.
+app.get('/health', async (req: Request, res: Response) => {
+  try {
+    // Verificar conexión a la base de datos
+    const client = await PoolDb.connect();
+    client.release();
+    res.status(200).json({
+      status: 'ok',
+      message: 'Servidor funcionando correctamente',
+      timestamp: new Date().toISOString(),
+      database: 'connected',
+      uptime: process.uptime(),
+      environment: process.env.NODE_ENV || 'development'
+    });
+  } catch (error: any) {
+    res.status(503).json({
+      status: 'error',
+      message: 'Servidor con problemas',
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: error.message,
+      uptime: process.uptime(),
+      environment: process.env.NODE_ENV || 'development'
+    });
+  }
+});
 
 // Middleware para autenticar el token
 app.use(authenticateToken);
