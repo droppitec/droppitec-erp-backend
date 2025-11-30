@@ -8,10 +8,11 @@
   "scripts": {
     "tsc": "tsc",
     "start:dev": "nodemon",
-    "dev": "ts-node src/app.ts",
+    "dev": "ts-node app.ts",
     "test": "jest --coverage",
     "build": "tsc -p .",
-    "start": "ts-node dist/app.js",
+    "start": "node dist/app.js",
+    "vercel-build": "npm run build",
     "prettier-format": "prettier --config .prettierrc.json **/*.ts --write",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint --fix --ext .ts ."
@@ -125,7 +126,7 @@
     "supertest": "^6.0.1",
     "ts-jest": "^26.4.4",
     "ts-node": "^10.8.1",
-    "typescript": "^4.7.3",
+    "typescript": "^5.3.3",
     "uuid": "^11.0.3"
   }
 }

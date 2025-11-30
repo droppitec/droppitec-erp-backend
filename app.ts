@@ -44,12 +44,17 @@ AppRoutes.forEach((route) => {
 });
 
 const startServer = async () => {
-  await app.listen(8080, () => {
-    logger.info(`Server running on http://127.0.0.1:8080`);
+  const PORT = process.env.PORT || 8080;
+  await app.listen(PORT, () => {
+    logger.info(`Server running on http://127.0.0.1:${PORT}`);
   });
 };
 
-(async () => {
-  connectDatabase();
-  await startServer();
-})();
+// Solo iniciar el servidor si no estamos en Vercel
+// Vercel manejará el servidor automáticamente
+if (process.env.VERCEL !== '1') {
+  (async () => {
+    connectDatabase();
+    await startServer();
+  })();
+}

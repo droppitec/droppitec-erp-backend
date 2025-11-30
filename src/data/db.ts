@@ -6,11 +6,11 @@ import { Schedulers } from '../schedulers/Schedulers';
  * The pool will manage multiple clients and handle the connection to the database.
  */
 const PoolDb = new Pool({
-  user: 'CALIDO-DESARROLLO_owner',
-  host: 'ep-dark-bird-a5pxkbln.us-east-2.aws.neon.tech',
-  database: 'CALIDO_DESARROLLO',
-  password: 'fcwzrF0QJj1Y',
-  port: 5432,
+  user: process.env.DB_USER || '',
+  host: process.env.DB_HOST || '',
+  database: process.env.DB_NAME || '',
+  password: process.env.DB_PASSWORD || '',
+  port: parseInt(process.env.DB_PORT || '5432', 10),
   ssl: {
     rejectUnauthorized: false
   },

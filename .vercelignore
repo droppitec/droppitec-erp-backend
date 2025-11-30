@@ -1,0 +1,15 @@
+node_modules
+logs
+src/assets/uploads
+*.log
+*.log.gz
+.env
+.env.local
+.env.*.local
+docker-compose.yml
+docker-compose.override.yml
+Dockerfile
+Jenkinsfile
+.git
+.gitignore
+
