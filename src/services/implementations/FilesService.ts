@@ -32,7 +32,7 @@ export class FilesService implements IFilesService {
         const filePath = path.join(destFolder, nombreUnico);
 
         // Guarda el archivo en el sistema de archivos
-        await fs.promises.writeFile(filePath, file.buffer);
+        await fs.promises.writeFile(filePath, file.buffer as Uint8Array);
 
         // Crea una instancia de Archivo
         const archivo = new Archivo();
