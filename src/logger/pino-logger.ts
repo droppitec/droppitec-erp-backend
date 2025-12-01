@@ -1,35 +1,22 @@
 import pino from 'pino';
-import { Logger, Message } from '../models/Logger';
 
-export class PinoLogger implements Logger {
-  private readonly logger: pino.Logger;
-  constructor() {
-    this.logger = pino({
-      level: 'info',
-      transport: {
+// Detectamos si estamos en desarrollo local
+const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
+
+export const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+
+  // AQUÍ ESTÁ EL TRUCO:
+  // Si estamos en producción (Vercel), transport es undefined (usa JSON nativo rápido).
+  // Si estamos en local, usa pino-pretty para que se vea bonito.
+  transport: !isProduction
+    ? {
         target: 'pino-pretty',
         options: {
           colorize: true,
-          translateTime: 'SYS:dd-mm-yyyy HH:MM:ss',
+          translateTime: 'SYS:standard',
           ignore: 'pid,hostname'
         }
       }
-    });
-  }
-
-  error(message: Message): void {
-    this.logger.error(message);
-  }
-
-  info(message: Message): void {
-    this.logger.info(message);
-  }
-
-  warn(message: Message): void {
-    this.logger.warn(message);
-  }
-
-  log(message: Message): void {
-    this.logger.info(message);
-  }
-}
+    : undefined
+});
