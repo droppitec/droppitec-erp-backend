@@ -10,6 +10,7 @@ import { IgApiClient } from 'instagram-private-api';
 import { promisify } from 'util';
 import { readFile } from 'fs';
 import path from 'node:path';
+import os from 'node:os';
 import { PoolClient } from 'pg';
 
 /**
@@ -251,7 +252,8 @@ export class PromocionesRepository implements IPromocionesRepository {
 
       // Publicar la imagen en Instagram
       const readFileAsync = promisify(readFile);
-      const pathImage = path.join(process.cwd(), 'src', 'assets', 'imgs', 'instagram', nombreImagen);
+      // En Vercel, la imagen se guardó en el directorio temporal
+      const pathImage = path.join(os.tmpdir(), 'instagram_uploads', nombreImagen);
 
       const publishResult = await ig.publish.photo({
         file: await readFileAsync(pathImage),

@@ -7,6 +7,7 @@ import { PromocionesService } from '../services/implementations/PromocionesServi
 import { Promocion } from '../models/Promocion';
 import { FiltrosPromociones } from '../models/comandos/FiltroPromociones';
 import path from 'node:path';
+import os from 'node:os';
 import multer from 'multer';
 import { Producto } from '../models/Producto';
 import * as fs from 'node:fs';
@@ -14,11 +15,16 @@ import * as fs from 'node:fs';
 const _promocionesService = container.get<PromocionesService>(TYPES.PromocionesService);
 
 // Carpeta de destino de las imagenes de instagram
-const destFolder = path.join(process.cwd(), 'src', 'assets', 'imgs', 'instagram');
+// Usamos el directorio temporal del sistema porque en Vercel el sistema de archivos es de solo lectura
+const destFolder = path.join(os.tmpdir(), 'instagram_uploads');
 
 // Asegurar que la carpeta de imagenes de instagram exista
 if (!fs.existsSync(destFolder)) {
-  fs.mkdirSync(destFolder, { recursive: true });
+  try {
+    fs.mkdirSync(destFolder, { recursive: true });
+  } catch (error) {
+    logger.error('Error creating temp directory: ' + error);
+  }
 }
 
 const storage = multer.diskStorage({
