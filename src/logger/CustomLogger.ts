@@ -1,36 +1,41 @@
-const resolver = require('path').resolve;
-const path = resolver('./logs');
 import { createLogger, format, transports } from 'winston';
-import DailyRotateFile from 'winston-daily-rotate-file';
-const { combine, timestamp, label, printf } = format;
 
-const customFormat = combine(
-  label({ label: 'Logging' }),
-  timestamp(),
-  printf((info) => {
-    return `${info.timestamp} ${info.level}:${info.message}`;
+// Definimos los transportes (lugares donde se guardan los logs)
+const logTransports = [];
+
+// 1. Siempre agregar Console (Para ver los logs en Vercel y en tu terminal local)
+logTransports.push(
+  new transports.Console({
+    format: format.combine(format.colorize(), format.simple())
   })
 );
-const logger = createLogger({
-  format: customFormat,
-  transports: [
+
+// 2. Solo agregar archivo si NO estamos en Vercel
+// Vercel define la variable de entorno 'VERCEL' automáticamente
+if (process.env.VERCEL !== '1') {
+  logTransports.push(
     new transports.File({
-      filename: `${path}/app-info.log`,
-      level: 'info'
-    }),
-    new transports.File({
-      filename: `${path}/app-error.log`,
+      filename: 'logs/error.log',
       level: 'error'
-    }),
-    new transports.Console(),
-    new DailyRotateFile({
-      filename: `${path}/application-%DATE%.log`,
-      datePattern: 'YYYY-MM-DD',
-      zippedArchive: true,
-      maxSize: '50m',
-      maxFiles: '14d'
     })
-  ],
-  exceptionHandlers: [new transports.File({ filename: `${path}/app-exceptions.log` })]
+  );
+  logTransports.push(
+    new transports.File({
+      filename: 'logs/combined.log'
+    })
+  );
+}
+
+export const logger = createLogger({
+  level: 'info',
+  format: format.combine(
+    format.timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss'
+    }),
+    format.errors({ stack: true }),
+    format.splat(),
+    format.json()
+  ),
+  defaultMeta: { service: 'user-service' },
+  transports: logTransports
 });
-export { logger };
