@@ -482,7 +482,7 @@ export const AppRoutes = [
     method: 'get',
     action: ConfiguracionesController.existeConfiguracion,
     schema: schemaEmpty,
-    middleware: [authenticateToken]
+    middleware: []
   },
   //#endregion
 
