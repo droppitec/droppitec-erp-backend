@@ -26,9 +26,12 @@
       "js"
     ],
     "transform": {
-      "^.+\\.(ts|tsx)$": ["ts-jest", {
-        "tsconfig": "tsconfig.json"
-      }]
+      "^.+\\.(ts|tsx)$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json"
+        }
+      ]
     },
     "testMatch": [
       "**/tests/*.+(ts|tsx|js)"
@@ -55,6 +58,7 @@
     "@types/jsonwebtoken": "^8.3.9",
     "@types/oracledb": "5.3.0",
     "@types/tunnel": "0.0.1",
+    "@vercel/node": "^5.5.13",
     "argon2": "^0.40.3",
     "async": "3.2.4",
     "axios": "1.6.0",
