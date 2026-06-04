@@ -1,5 +1,10 @@
 node_modules
 dist
+
+# Variables de entorno / secretos (NUNCA subir)
+.env
+.env.*
+!.env.example
 .idea/
 .vscode/
 build/
